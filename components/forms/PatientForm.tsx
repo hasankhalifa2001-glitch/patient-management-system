@@ -5,9 +5,14 @@ import { useForm } from "react-hook-form"
 import z from "zod"
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    error: "Username must be at least 2 characters"
-  }).max(50)
+  title: z
+    .string()
+    .min(5, "Bug title must be at least 5 characters.")
+    .max(32, "Bug title must be at most 32 characters."),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters.")
+    .max(100, "Description must be at most 100 characters."),
 })
 
 const PatientForm = () => {
@@ -15,15 +20,22 @@ const PatientForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: ""
-    }
+      title: "",
+      description: "",
+    },
   })
 
-  function onSubmit(value: z.infer<typeof formSchema>) {
-    console.log(value)
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    console.log(data)
   }
+
   return (
-    <div></div>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      {/* ... */}
+      {/* Build the form here */}
+      {/* ... */}
+    </form>
   )
 }
 

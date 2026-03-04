@@ -1,6 +1,5 @@
 @import "tailwindcss";
-/* @import "tailwindcss-animate"; */
-
+@plugin "tailwindcss-animate";
 @theme {
     --color-green-500: #24AE7C;
     --color-green-600: #0D2A1F;
