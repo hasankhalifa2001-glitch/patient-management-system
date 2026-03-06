@@ -1,123 +1,30 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts"; /* تأكد من صحة المسار للملف */
 @plugin "tailwindcss-animate";
-@theme {
-    --color-green-500: #24AE7C;
-    --color-green-600: #0D2A1F;
-    --color-blue-500: #79B5EC;
-    --color-blue-600: #152432;
-    --color-red-500: #F37877;
-    --color-red-600: #3E1716;
-    --color-red-700: #F24E43;
-    --color-light-200: #E8E9E9;
-    --color-dark-200: #0D0F10;
-    --color-dark-300: #131619;
-    --color-dark-400: #1A1D21;
-    --color-dark-500: #363A3D;
-    --color-dark-600: #76828D;
-    --color-dark-700: #ABB8C4;
-
-    --background-image-appointments: url('/assets/images/appointments-bg.png');
-    --background-image-pending: url('/assets/images/pending-bg.png');
-    --background-image-cancelled: url('/assets/images/cancelled-bg.png');
-
-    --animate-accordion-down: accordion-down 0.2s ease-out;
-    --animate-accordion-up: accordion-up 0.2s ease-out;
-    --animate-caret-blink: caret-blink 1.25s ease-out infinite;
-
-    @keyframes accordion-down {
-        from {
-            height: 0;
-        }
-
-        to {
-            height: var(--radix-accordion-content-height);
-        }
-    }
-
-    @keyframes accordion-up {
-        from {
-            height: var(--radix-accordion-content-height);
-        }
-
-        to {
-            height: 0;
-        }
-    }
-
-    @keyframes caret-blink {
-
-        0%,
-        70%,
-        100% {
-            opacity: 1;
-        }
-
-        20%,
-        50% {
-            opacity: 0;
-        }
-    }
-}
-
-:root {
-    --background: #ffffff;
-    --foreground: #09090b;
-    --primary: #18181b;
-    --radius: 0.5rem;
-    --border: #e4e4e7;
-    --input: #e4e4e7;
-    --ring: #18181b;
-}
-
-.dark {
-    --background: #09090b;
-    --foreground: #fafafa;
-    --primary: #fafafa;
-    --border: #27272a;
-    --input: #27272a;
-    --ring: #d4d4d8;
-}
-
-@layer base {
-
-    *,
-    *::before,
-    *::after {
-        border-color: var(--border);
-    }
-
-    body {
-        background-color: var(--background);
-        color: var(--foreground);
-    }
-
-    /* Remove scrollbar */
-    .remove-scrollbar::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-        border-radius: 0px;
-    }
-
-    .remove-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .remove-scrollbar::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 0px;
-    }
-
-    .remove-scrollbar::-webkit-scrollbar-thumb:hover {
-        /* background: #1e2238; */
-        background: transparent;
-    }
-}
-
-
 
 @layer utilities {
 
-    /* ===== TYPOGRAPHY */
+    /* Remove scrollbar */
+  .remove-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb:hover {
+    /* background: #1e2238; */
+    background: transparent;
+  }
+ /* ===== TYPOGRAPHY */
     .text-36-bold {
         @apply text-[36px] leading-10 font-bold;
     }
@@ -290,7 +197,7 @@
 
     /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
     .input-phone {
-        @apply mt-2 h-11 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500;
+        @apply mt-2 h-11 rounded-md px-3 text-sm bg-dark-400 placeholder:text-dark-600 border-dark-500;
     }
 
     /* =====  REACT DATE PICKER OVERRIDES */
@@ -301,8 +208,8 @@
 
 /* =====  REACT-DATEPICKER OVERRIDES */
 .react-datepicker-wrapper.date-picker {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .react-datepicker,
@@ -312,7 +219,61 @@
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker-time__header {
-    background-color: #1a1d21 !important;
-    border-color: #363a3d !important;
-    color: #abb8c4 !important;
+  background-color: #1a1d21 !important;
+  border-color: #363a3d !important;
+  color: #abb8c4 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker-time__header {
+  color: #ffffff !important;
+}
+
+.react-datepicker__triangle {
+  fill: #1a1d21 !important;
+  color: #1a1d21 !important;
+  stroke: #1a1d21 !important;
+}
+
+.react-datepicker__time-list-item:hover {
+  background-color: #363a3d !important;
+}
+
+.react-datepicker__input-container input {
+  background-color: #1a1d21 !important;
+  width: 100%;
+  outline: none;
+}
+
+.react-datepicker__day--selected {
+  background-color: #24ae7c !important;
+  color: #ffffff !important;
+  border-radius: 4px;
+}
+
+.react-datepicker__time-list-item--selected {
+  background-color: #24ae7c !important;
+}
+
+.react-datepicker__time-container {
+  border-left: 1px solid #363a3d !important;
+}
+
+.react-datepicker__time-list-item {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* =====  REACT PHONE NUMBER INPUT OVERRIDES */
+.PhoneInputInput {
+  outline: none;
+  margin-left: 4px;
+  background: #1a1d21;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.PhoneInputInput::placeholder {
+  color: #1a1d21;
 }

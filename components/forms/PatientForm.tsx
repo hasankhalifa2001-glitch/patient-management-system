@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import z from "zod"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -14,51 +13,88 @@ import {
 } from "@/components/ui/card"
 import {
   Field,
-  FieldDescription,
-  FieldError,
   FieldGroup,
-  FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group"
+import CustomFormField from "../CustomFormField"
+import SubmitButton from "../SubmitButton"
+import { useState } from "react"
+import { UserFormValidation } from "@/lib/validation"
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, "Bug title must be at least 5 characters.")
-    .max(32, "Bug title must be at most 32 characters."),
-  description: z
-    .string()
-    .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
-})
+export enum FormFieldType {
+  INPUT = 'input',
+  TEXTAREA = 'textarea',
+  PHONE_INPUT = 'phoneInput',
+  CHECKBOX = 'checkbox',
+  DATE_PICKER = 'datePicker',
+  SELECT = 'select',
+  SKELETON = 'skeleton'
+}
 
 const PatientForm = () => {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isLoading, setIsLoading] = useState(false)
+
+  const form = useForm<z.infer<typeof UserFormValidation>>({
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      title: "",
-      description: "",
+      name: "",
+      email: "",
+      phone: ""
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: z.infer<typeof UserFormValidation>) {
     // Do something with the form values.
     console.log(data)
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
-      {/* ... */}
-      {/* Build the form here */}
-      {/* ... */}
-    </form>
+    <Card className="w-full max-w-124 sm:max-w-md space-y-6">
+      <CardHeader className="mb-8 space-y-4">
+        <CardTitle className="header">Hi there, ....</CardTitle>
+        <CardDescription className="text-dark-700">
+          Get Started with Appointments.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name='name'
+              label='Full name'
+              placeholder='Hasan Khalifa'
+              iconSrc='/assets/icons/user.svg'
+              iconAlt='user'
+            />
+
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name='email'
+              label='Email'
+              placeholder='HasanKhalifa@gmail.com'
+              iconSrc='/assets/icons/email.svg'
+              iconAlt='email'
+            />
+            <CustomFormField
+              fieldType={FormFieldType.PHONE_INPUT}
+              control={form.control}
+              name='phone'
+              label='Phone Number'
+              placeholder='(555) 123-4567'
+            />
+
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter>
+        <Field orientation="horizontal">
+          <SubmitButton isLoading={isLoading} form="form-rhf-demo">Get Started</SubmitButton>
+        </Field>
+      </CardFooter>
+    </Card>
   )
 }
 

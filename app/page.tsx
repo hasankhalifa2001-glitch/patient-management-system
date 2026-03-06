@@ -7,16 +7,16 @@ export default function Home() {
     <div className="flex h-screen max-h-screen">
       {/* TODO: OTP Verification | PassKeyModel */}
       <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-124">
+        <div className="sub-container max-w-110">
           <Image
             src={`/assets/icons/logo-full.svg`}
             alt="patient"
             height={1000}
             width={1000}
-            className="mb-12 h-10 w-fit"
+            className="mb-10 h-10 w-fit"
           />
           <PatientForm />
-          <div className="text-14-regular mt-20 flex justify-between">
+          <div className="text-14-regular mt-6 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2026 CarePulse
             </p>
