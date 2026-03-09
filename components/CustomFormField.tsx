@@ -14,6 +14,7 @@ import Image from "next/image";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js/core";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 
 interface CustomProps {
     fieldType: FormFieldType;
@@ -39,11 +40,12 @@ const RenderField = ({
     fieldState: ControllerFieldState;
     props: CustomProps;
 }) => {
-    const { fieldType, name, iconAlt, iconSrc, placeholder } = props;
+    const { fieldType, name, iconAlt, iconSrc, placeholder, renderSkeleton } =
+        props;
     switch (fieldType) {
         case FormFieldType.INPUT:
             return (
-                <div className="flex rounded-md border border-dark-500 bg-dark-400">
+                <div className="flex rounded-md items-center border h-11 border-dark-500 bg-dark-400">
                     {iconSrc && iconAlt && (
                         <Image
                             src={iconSrc}
@@ -74,9 +76,34 @@ const RenderField = ({
                     withCountryCallingCode
                     value={field.value as E164Number | undefined}
                     onChange={field.onChange}
-                    className="input-phone border-0 focus-visible:outline-none"
+                    className="input-phone border "
                 />
             );
+        case FormFieldType.DATE_PICKER:
+            return (
+                <div className="flex rounded-md border h-11 border-dark-500 bg-dark-400">
+                    <Image
+                        src={"/assets/icons/calendar.svg"}
+                        height={24}
+                        width={24}
+                        alt="calendar"
+                        className="ml-2"
+                    />
+                </div>
+            );
+        case FormFieldType.SELECT:
+            return (
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger className="shad-select-trigger">
+                        <SelectValue placeholder={placeholder} />
+                    </SelectTrigger>
+                    <SelectContent className="shad-select-content">
+                        {props.children}
+                    </SelectContent>
+                </Select>
+            );
+        case FormFieldType.SKELETON:
+            return renderSkeleton ? renderSkeleton(field) : null;
         default:
             break;
     }
@@ -91,7 +118,12 @@ const CustomFormField = (props: CustomProps) => {
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                     {fieldType !== FormFieldType.CHECKBOX && label && (
-                        <FieldLabel htmlFor="form-rhf-demo-title">{label}</FieldLabel>
+                        <FieldLabel
+                            htmlFor="form-rhf-demo-title"
+                            className="shad-input-label"
+                        >
+                            {label}
+                        </FieldLabel>
                     )}
 
                     <RenderField field={field} fieldState={fieldState} props={props} />

@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
 import {
   Card,
   CardContent,
@@ -10,42 +10,55 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldGroup,
-} from "@/components/ui/field"
-import CustomFormField from "../CustomFormField"
-import SubmitButton from "../SubmitButton"
-import { useState } from "react"
-import { UserFormValidation } from "@/lib/validation"
+} from "@/components/ui/card";
+import { Field, FieldGroup } from "@/components/ui/field";
+import CustomFormField from "../CustomFormField";
+import SubmitButton from "../SubmitButton";
+import { useState } from "react";
+import { UserFormValidation } from "@/lib/validation";
+import { createUser } from "@/lib/actions/patient.actions";
+import { useRouter } from "next/navigation";
 
 export enum FormFieldType {
-  INPUT = 'input',
-  TEXTAREA = 'textarea',
-  PHONE_INPUT = 'phoneInput',
-  CHECKBOX = 'checkbox',
-  DATE_PICKER = 'datePicker',
-  SELECT = 'select',
-  SKELETON = 'skeleton'
+  INPUT = "input",
+  TEXTAREA = "textarea",
+  PHONE_INPUT = "phoneInput",
+  CHECKBOX = "checkbox",
+  DATE_PICKER = "datePicker",
+  SELECT = "select",
+  SKELETON = "skeleton",
 }
 
 const PatientForm = () => {
-
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
       name: "",
       email: "",
-      phone: ""
+      phone: "",
     },
-  })
+  });
 
-  function onSubmit(data: z.infer<typeof UserFormValidation>) {
-    // Do something with the form values.
-    console.log(data)
+  async function onSubmit(data: z.infer<typeof UserFormValidation>) {
+    setIsLoading(true);
+
+    try {
+      // const user = {
+      //   name: data.name,
+      //   email: data.email,
+      //   phone: data.phone,
+      // };
+
+      const user = await createUser(data);
+      if (user) router.push(`/patients/${user.id}/register`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -62,40 +75,41 @@ const PatientForm = () => {
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name='name'
-              label='Full name'
-              placeholder='Hasan Khalifa'
-              iconSrc='/assets/icons/user.svg'
-              iconAlt='user'
+              name="name"
+              label="Full name"
+              placeholder="Hasan Khalifa"
+              iconSrc="/assets/icons/user.svg"
+              iconAlt="user"
             />
 
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
-              name='email'
-              label='Email'
-              placeholder='HasanKhalifa@gmail.com'
-              iconSrc='/assets/icons/email.svg'
-              iconAlt='email'
+              name="email"
+              label="Email"
+              placeholder="HasanKhalifa@gmail.com"
+              iconSrc="/assets/icons/email.svg"
+              iconAlt="email"
             />
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
               control={form.control}
-              name='phone'
-              label='Phone Number'
-              placeholder='(555) 123-4567'
+              name="phone"
+              label="Phone Number"
+              placeholder="(555) 123-4567"
             />
-
           </FieldGroup>
         </form>
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <SubmitButton isLoading={isLoading} form="form-rhf-demo">Get Started</SubmitButton>
+          <SubmitButton isLoading={isLoading} form="form-rhf-demo">
+            Get Started
+          </SubmitButton>
         </Field>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default PatientForm
+export default PatientForm;
