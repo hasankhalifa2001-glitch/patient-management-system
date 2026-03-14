@@ -134,7 +134,7 @@
 
   /* ==== FORM */
   .radio-group {
-    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500 bg-dark-400 p-3;
+    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500  p-3;
   }
 
   .checkbox-label {
@@ -270,7 +270,7 @@
 
     /* =====  REACT DATE PICKER OVERRIDES */
     .date-picker {
-        @apply overflow-hidden border-transparent w-full placeholder:text-dark-600 h-11 text-[14px] leading-4.5 font-medium rounded-md px-3 outline-none;
+        @apply overflow-hidden border border-dark-500 w-full placeholder:text-dark-600 h-11 text-[14px] leading-4.5 font-medium rounded-md px-3 outline-none;
     }
 }
 

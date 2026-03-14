@@ -1,16 +1,16 @@
 import RegisterForm from '@/components/forms/RegisterForm'
 import { getUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
-import Link from 'next/link'
 
-const RegisterPage = ({ params: { userId } }: SearchParamProps) => {
+const RegisterPage = async ({ params }: SearchParamProps) => {
 
-    // const user = getUser(userId)
+    const { userId } = await params
+
+    const user = await getUser(userId)
 
     return (
         <div className="flex h-screen max-h-screen">
-            {/* TODO: OTP Verification | PassKeyModel */}
-            <section className="remove-scrollbar container my-auto">
+            <section className="remove-scrollbar container">
                 <div className="sub-container max-w-220">
                     <Image
                         src={`/assets/icons/logo-full.svg`}
@@ -19,14 +19,11 @@ const RegisterPage = ({ params: { userId } }: SearchParamProps) => {
                         width={1000}
                         className="mb-10 h-10 w-fit"
                     />
-                    <RegisterForm />
-                    <div className="text-14-regular mt-6 flex justify-between">
-                        <p className="justify-items-end text-dark-600 xl:text-left">
+                    <RegisterForm user={user} />
+                    <div className="text-14-regular  flex justify-between">
+                        <p className="justify-items-end my-6 text-dark-600 xl:text-left">
                             © 2026 CarePulse
                         </p>
-                        <Link href={`/?admin=true`} className="text-green-500">
-                            admin
-                        </Link>
                     </div>
                 </div>
             </section>
