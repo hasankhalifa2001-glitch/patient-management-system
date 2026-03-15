@@ -1,7 +1,6 @@
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-    databases,
     NEXT_PUBLIC_APPWRITE_ENDPOINT,
     NEXT_PUBLIC_APPWRITE_PROJECT_ID,
     NEXT_PUBLIC_BUCKET_ID,
@@ -43,25 +42,6 @@ export const getUser = async (userId: string) => {
         console.log(error);
     }
 };
-export const getpatient = async (userId: string) => {
-    try {
-        const patient = await databases.listDocuments({
-            collectionId: NEXT_PUBLIC_PATIENT_TABLE_ID!,
-            databaseId: NEXT_PUBLIC_DATABASE_ID!,
-            queries: [Query.equal('userId', userId)]
-        });
-
-        // let promise = tablesDB.getRow({
-        //     databaseId: NEXT_PUBLIC_DATABASE_ID!,
-        //     tableId: NEXT_PUBLIC_PATIENT_TABLE_ID!,
-        //     rowId: userId,
-        // });
-
-        return parseStringify(patient.documents[0]);
-    } catch (error) {
-        console.log(error);
-    }
-};
 
 export const registerPatient = async ({
     identificationDocument,
@@ -95,6 +75,21 @@ export const registerPatient = async ({
             }
         })
         return parseStringify(newPatient)
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getpatient = async (userId: string) => {
+    try {
+
+        const patient = await tablesDB.listRows({
+            databaseId: NEXT_PUBLIC_DATABASE_ID!,
+            tableId: NEXT_PUBLIC_PATIENT_TABLE_ID!,
+            queries: [Query.equal('userId', userId)]
+        })
+
+        return parseStringify(patient.rows[0]);
     } catch (error) {
         console.log(error);
     }
