@@ -22,14 +22,17 @@ export const createUser = async (user: CreateUserParams) => {
             phone: user.phone,
             name: user.name,
         });
+        console.log(newUser)
 
         return parseStringify(newUser);
+
     } catch (error: any) {
+        console.log(error);
         if (error && error?.code === 409) {
             const documents = await users.list({
                 queries: [Query.equal("email", [user.email])],
             });
-            return documents?.users[0];
+            return parseStringify(documents.users[0])
         }
     }
 };

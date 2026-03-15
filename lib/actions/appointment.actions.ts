@@ -28,12 +28,19 @@ export const createAppointment = async (
 
 export const getAppointment = async (appointmentId: string) => {
     try {
-        const appointment = await tablesDB.listRows({
+        // const appointment = await tablesDB.listRows({
+        //     databaseId: NEXT_PUBLIC_DATABASE_ID!,
+        //     tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
+        //     queries: [Query.equal('appointmentId', appointmentId)]
+        // })
+        // return parseStringify(appointment.rows[0])
+
+        const appointment = await tablesDB.getRow({
             databaseId: NEXT_PUBLIC_DATABASE_ID!,
             tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
-            queries: [Query.equal('appointmentId', appointmentId)]
+            rowId: appointmentId
         })
-        return parseStringify(appointment.rows[0])
+        return parseStringify(appointment)
     } catch (error) {
         console.log(error)
     }
