@@ -7,6 +7,7 @@ import {
     tablesDB,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
+import { Appointment } from "./appwrite.types";
 
 export const createAppointment = async (
     appointment: CreateAppointmentParams,
@@ -28,13 +29,6 @@ export const createAppointment = async (
 
 export const getAppointment = async (appointmentId: string) => {
     try {
-        // const appointment = await tablesDB.listRows({
-        //     databaseId: NEXT_PUBLIC_DATABASE_ID!,
-        //     tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
-        //     queries: [Query.equal('appointmentId', appointmentId)]
-        // })
-        // return parseStringify(appointment.rows[0])
-
         const appointment = await tablesDB.getRow({
             databaseId: NEXT_PUBLIC_DATABASE_ID!,
             tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
@@ -45,3 +39,47 @@ export const getAppointment = async (appointmentId: string) => {
         console.log(error)
     }
 };
+
+export const getRecentAppointmentList = async () => {
+
+    try {
+        const appointments = await tablesDB.listRows({
+            databaseId: NEXT_PUBLIC_DATABASE_ID!,
+            tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
+            queries: [
+                Query.orderDesc("$createdAt")
+            ]
+        })
+
+        const initialCounts = {
+            scheduledCount: 0,
+            pendingCount: 0,
+            cancelledCount: 0,
+        }
+
+        const counts = (appointments.rows as unknown as Appointment[]).reduce((acc, appointment) => {
+            if (appointment.status === 'scheduled') {
+                acc.scheduledCount += 1;
+            } else if (appointment.status === 'pending') {
+                acc.pendingCount += 1;
+            } else if (appointment.status === 'cancelled') {
+                acc.cancelledCount += 1;
+            }
+
+            return acc;
+
+        }, initialCounts)
+
+        const data = {
+            totalCount: appointments.total,
+            ...counts,
+            rows: appointments.rows
+        }
+
+        return parseStringify(data)
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
