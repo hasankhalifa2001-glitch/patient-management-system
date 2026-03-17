@@ -6,37 +6,47 @@ import z from "zod";
 import { Field } from "@/components/ui/field";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
-import { useState } from "react";
-import { CreateAppointmentSchema, getAppointmentSchema } from "@/lib/validation";
+import { Dispatch, SetStateAction, useState } from "react";
+import {
+    getAppointmentSchema,
+} from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { FormFieldType } from "./PatientForm";
 import { Doctors } from "@/constants";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
-import { createAppointment } from "@/lib/actions/appointment.actions";
+import {
+    createAppointment,
+    updateAppointment,
+} from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/lib/actions/appwrite.types";
 
 const AppointmentForm = ({
     type,
     userId,
     patientId,
+    appointment,
+    setOpen,
 }: {
-    type: "create" | "cancel" | 'schedule';
     userId: string;
-    patientId?: string;
+    patientId: string;
+    type: "create" | "schedule" | "cancel";
+    appointment?: Appointment;
+    setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
-    const AppointmentFormValidation = getAppointmentSchema(type)
+    const AppointmentFormValidation = getAppointmentSchema(type);
 
     const form = useForm<z.infer<typeof AppointmentFormValidation>>({
         resolver: zodResolver(AppointmentFormValidation),
         defaultValues: {
-            cancellationReason: '',
-            note: '',
-            primaryPhysician: '',
-            reason: '',
-            schedule: new Date()
+            cancellationReason: appointment?.cancellationReason ?? undefined,
+            note: appointment ? appointment.note : "",
+            primaryPhysician: appointment ? appointment.primaryPhysician : '',
+            reason: appointment ? appointment.reason : "",
+            schedule: appointment ? new Date(appointment.schedule) : new Date(Date.now()),
         },
     });
 
@@ -46,18 +56,17 @@ const AppointmentForm = ({
         let status;
         switch (type) {
             case "schedule":
-                status = 'scheduled'
+                status = "scheduled";
                 break;
             case "cancel":
-                status = 'cancelled'
+                status = "cancelled";
                 break;
             default:
-                status = 'pending'
+                status = "pending";
                 break;
         }
 
         try {
-
             if (type === "create" && patientId) {
                 const appointmentData = {
                     userId,
@@ -66,16 +75,36 @@ const AppointmentForm = ({
                     schedule: new Date(data.schedule),
                     reason: data.reason!,
                     note: data.note,
-                    status: status as Status
-                }
-                const appointment = await createAppointment(appointmentData)
+                    status: status as Status,
+                };
+                const appointment = await createAppointment(appointmentData);
                 if (appointment) {
-                    form.reset()
-                    router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
+                    form.reset();
+                    router.push(
+                        `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`,
+                    );
+                }
+            } else if (appointment?.$id) {
+                const appointmentToUpdate = {
+                    userId,
+                    appointmentId: appointment.$id,
+                    appointment: {
+                        primaryPhysician: data.primaryPhysician,
+                        schedule: new Date(data?.schedule),
+                        status: status as Status,
+                        cancellationReason: data?.cancellationReason,
+                    },
+                    type,
+                };
+                const updatedAppointment = await updateAppointment(appointmentToUpdate);
+
+                if (updatedAppointment) {
+                    if (setOpen) {
+                        setOpen(false);
+                    }
+                    form.reset();
                 }
             }
-
-
         } catch (error) {
             console.log(error);
         } finally {
@@ -87,26 +116,31 @@ const AppointmentForm = ({
 
     switch (type) {
         case "cancel":
-            buttonLabel = 'Cancel Appointment'
+            buttonLabel = "Cancel Appointment";
             break;
         case "create":
-            buttonLabel = 'Create Appointment'
+            buttonLabel = "Create Appointment";
             break;
         case "schedule":
-            buttonLabel = 'Cancel Appointment'
+            buttonLabel = "Schedule Appointment";
             break;
     }
 
     return (
         <div className="space-y-12 flex-1">
-            <section className="mb-8 space-y-4">
-                <div className="header">New Appointment</div>
-                <div className="text-dark-700">
-                    Request a new appointment in 10 seconds
-                </div>
-            </section>
+            {type === "create" && (
+                <section className="mb-8 space-y-4">
+                    <div className="header">New Appointment</div>
+                    <div className="text-dark-700">
+                        Request a new appointment in 10 seconds
+                    </div>
+                </section>
+            )}
             <div>
-                <form id="form-rhf-demo-appointment" onSubmit={form.handleSubmit(onSubmit)}>
+                <form
+                    id="form-rhf-demo-appointment"
+                    onSubmit={form.handleSubmit(onSubmit)}
+                >
                     <section className="mb-16 space-y-8">
                         {type !== "cancel" && (
                             <div className="space-y-6">

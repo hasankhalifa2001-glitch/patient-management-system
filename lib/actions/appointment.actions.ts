@@ -8,6 +8,7 @@ import {
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 import { Appointment } from "./appwrite.types";
+import { revalidatePath } from "next/cache";
 
 export const createAppointment = async (
     appointment: CreateAppointmentParams,
@@ -47,7 +48,8 @@ export const getRecentAppointmentList = async () => {
             databaseId: NEXT_PUBLIC_DATABASE_ID!,
             tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
             queries: [
-                Query.orderDesc("$createdAt")
+                Query.orderDesc("$createdAt"),
+                Query.select(["*", "patient.*"])
             ]
         })
 
@@ -82,4 +84,26 @@ export const getRecentAppointmentList = async () => {
         console.log(error)
     }
 
+}
+
+export const updateAppointment = async ({ appointmentId, userId, appointment, type }: UpdateAppointmentParams) => {
+    try {
+        const updatedAppointment = await tablesDB.updateRow({
+            databaseId: NEXT_PUBLIC_DATABASE_ID!,
+            tableId: NEXT_PUBLIC_APPOINTMENT_TABLE_ID!,
+            rowId: appointmentId!,
+            data: {
+                ...appointment
+            }
+        })
+
+        if (!updatedAppointment) {
+            throw new Error('Failed to update appointment')
+        }
+
+        revalidatePath('/admin')
+        return parseStringify(updatedAppointment)
+    } catch (error) {
+        console.log(error)
+    }
 }
