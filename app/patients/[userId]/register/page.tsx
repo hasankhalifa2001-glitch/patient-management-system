@@ -1,12 +1,15 @@
 import RegisterForm from '@/components/forms/RegisterForm'
 import { getUser } from '@/lib/actions/patient.actions'
 import Image from 'next/image'
+import * as Sentry from "@sentry/nextjs";
 
 const RegisterPage = async ({ params }: SearchParamProps) => {
 
     const { userId } = await params
 
     const user = await getUser(userId)
+
+    Sentry.metrics.count("user_view_register", user.name);
 
     return (
         <div className="flex h-screen max-h-screen">

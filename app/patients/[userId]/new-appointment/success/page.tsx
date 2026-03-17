@@ -4,6 +4,9 @@ import { getAppointment } from "@/lib/actions/appointment.actions"
 import { formatDateTime } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+import * as Sentry from "@sentry/nextjs";
+import { getUser } from "@/lib/actions/patient.actions"
+
 
 
 const SuccessPage = async ({ params, searchParams }: SearchParamProps) => {
@@ -15,6 +18,10 @@ const SuccessPage = async ({ params, searchParams }: SearchParamProps) => {
     const appointment = await getAppointment(appointmentId)
 
     const doctor = Doctors.find((doc) => doc.name === appointment.primaryPhysician)
+
+    const user = await getUser(userId)
+
+    Sentry.metrics.count("user_view_appointment-success", user.name);
 
     return (
         <div className="flex h-screen max-h-screen px-[5%]">
