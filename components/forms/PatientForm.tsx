@@ -56,14 +56,15 @@ const PatientForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-124 sm:max-w-md space-y-6">
-      <CardHeader className="mb-8 space-y-4">
-        <CardTitle className="header">Hi there, ....</CardTitle>
-        <CardDescription className="text-dark-700">
+    <div className="w-full space-y-6">
+      <section className="mb-10 space-y-3">
+        <h1 className="header text-slate-900 dark:text-white">Welcome back!</h1>
+        <p className="text-slate-600 dark:text-dark-700">
           Get Started with Appointments.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
+      </section>
+
+      <div>
         <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <CustomFormField
@@ -94,15 +95,12 @@ const PatientForm = () => {
             />
           </FieldGroup>
         </form>
-      </CardContent>
-      <CardFooter>
-        <Field orientation="horizontal">
-          <SubmitButton isLoading={isLoading} form="form-rhf-demo">
-            Get Started
-          </SubmitButton>
-        </Field>
-      </CardFooter>
-    </Card>
+      </div>
+
+      <SubmitButton isLoading={isLoading} form="form-rhf-demo">
+        Get Started
+      </SubmitButton>
+    </div>
   );
 };
 

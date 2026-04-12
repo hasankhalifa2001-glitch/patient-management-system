@@ -66,6 +66,10 @@
     }
 
     /* ===== UTILITIES */
+    * {
+        @apply transition-colors duration-300;
+    }
+
     .sidebar {
         @apply w-full max-w-72 flex-col overflow-auto bg-dark-700 px-7 py-10;
     }
@@ -87,7 +91,7 @@
     }
 
     .header {
-        @apply text-[32px] leading-9 font-bold md:text-[36px] md:leading-10 md:font-bold;
+        @apply text-[32px] leading-9 font-bold md:text-[40px] md:leading-[48px] md:font-bold tracking-tight;
     }
 
     .sub-header {
@@ -95,19 +99,19 @@
     }
 
     .container {
-        @apply relative flex-1 overflow-y-auto px-[5%];
+        @apply relative flex-1 overflow-y-auto px-[5%] lg:px-10;
     }
 
     .sub-container {
-        @apply mx-auto flex size-full flex-col py-10;
+        @apply mx-auto flex size-full flex-col py-10 lg:py-16;
     }
 
     .side-img {
-        @apply hidden h-full object-cover md:block;
+        @apply hidden h-full object-cover md:block w-full;
     }
 
     .copyright {
-        @apply text-[14px] leading-4.5 font-normal justify-items-end text-center text-dark-600 xl:text-left;
+        @apply text-[14px] leading-4.5 font-normal justify-items-end text-center text-slate-600 dark:text-dark-600 xl:text-left;
     }
 
     /* ==== SUCCESS */
@@ -138,7 +142,7 @@
   }
 
   .checkbox-label {
-    @apply cursor-pointer text-sm font-medium text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 md:leading-none;
+    @apply cursor-pointer text-sm font-medium text-slate-900 dark:text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 md:leading-none;
   }
 
   /* ==== File Upload */
@@ -180,7 +184,7 @@
 
     /* =====  SHADCN OVERRIDES */
     .shad-primary-btn {
-        @apply bg-green-500 text-white;
+        @apply bg-blue-500 text-white transition-all hover:bg-blue-600 shadow-md hover:shadow-lg rounded-full py-7 w-full;
     }
 
     .shad-danger-btn {
@@ -192,19 +196,20 @@
     }
 
     .shad-input-label {
-        @apply text-[14px] leading-4.5 font-medium text-dark-700;
+        @apply text-[14px] leading-4.5 font-medium text-slate-900 dark:text-dark-600;
     }
 
     .shad-input {
-        @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0;
+        @apply !bg-white dark:!bg-dark-400 !text-slate-900 dark:!text-white placeholder:!text-slate-500 dark:placeholder:!text-dark-600 !border-0 focus-visible:!ring-0 focus-visible:!ring-offset-0;
+        height: 100%;
     }
 
     .shad-input-icon {
-        @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0;
+        @apply !bg-white dark:!bg-dark-400 !text-slate-900 dark:!text-white placeholder:!text-slate-500 dark:placeholder:!text-dark-600 !border-0 h-14 focus-visible:!ring-0 focus-visible:!ring-offset-0;
     }
 
     .shad-textArea {
-        @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0;
+        @apply !bg-white dark:!bg-dark-400 !text-slate-900 dark:!text-white placeholder:!text-slate-500 dark:placeholder:!text-dark-600 !border-0 focus-visible:!ring-0 focus-visible:!ring-offset-0;
     }
 
     .shad-combobox-item {
@@ -216,15 +221,15 @@
     }
 
     .shad-select-trigger {
-        @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11! focus:ring-0 focus:ring-offset-0;
+        @apply bg-white dark:bg-dark-400 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-dark-600 border border-slate-200 dark:border-dark-500 !h-11 focus:ring-0 focus:ring-offset-0;
     }
 
     .shad-select-content {
-        @apply bg-dark-400 border-dark-500;
+        @apply bg-white dark:bg-dark-400 border-slate-200 dark:border-dark-500;
     }
 
     .shad-dialog {
-        @apply bg-dark-400 border-dark-500;
+        @apply bg-white dark:bg-dark-400 border-slate-200 dark:border-dark-500;
     }
 
     .shad-dialog button {
@@ -265,7 +270,7 @@
 
     /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
     .input-phone {
-        @apply h-11 rounded-md px-3 text-sm bg-dark-400 placeholder:text-dark-600 border-dark-500;
+        @apply h-14 rounded-md px-3 text-sm !bg-white dark:!bg-dark-400 !text-slate-900 dark:!text-white placeholder:!text-slate-500 dark:placeholder:!text-dark-600 !border-0;
     }
 
     /* =====  REACT DATE PICKER OVERRIDES */
@@ -287,6 +292,18 @@
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker-time__header {
+  background-color: white !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.dark .react-datepicker,
+.dark .react-datepicker__time,
+.dark .react-datepicker__header,
+.dark .react-datepicker__current-month,
+.dark .react-datepicker__day-name,
+.dark .react-datepicker__day,
+.dark .react-datepicker-time__header {
   background-color: #1a1d21 !important;
   border-color: #363a3d !important;
   color: #abb8c4 !important;
@@ -295,23 +312,40 @@
 .react-datepicker__current-month,
 .react-datepicker__day-name,
 .react-datepicker-time__header {
+  color: #0f172a !important;
+}
+
+.dark .react-datepicker__current-month,
+.dark .react-datepicker__day-name,
+.dark .react-datepicker-time__header {
   color: #ffffff !important;
 }
 
 .react-datepicker__triangle {
+  fill: white !important;
+  color: white !important;
+  stroke: white !important;
+}
+
+.dark .react-datepicker__triangle {
   fill: #1a1d21 !important;
   color: #1a1d21 !important;
   stroke: #1a1d21 !important;
 }
 
 .react-datepicker__time-list-item:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.dark .react-datepicker__time-list-item:hover {
   background-color: #363a3d !important;
 }
 
 .react-datepicker__input-container input {
-  background-color: #1a1d21 !important;
+  background-color: transparent !important;
   width: 100%;
   outline: none;
+  color: inherit !important;
 }
 
 .react-datepicker__day--selected {
@@ -337,11 +371,34 @@
 .PhoneInputInput {
   outline: none;
   margin-left: 4px;
-  background: #1a1d21;
+  background: transparent !important;
   font-size: 14px;
   font-weight: 500;
+  color: inherit !important;
 }
 
 .PhoneInputInput::placeholder {
-  color: #1a1d21;
+  @apply !text-slate-500;
+}
+
+.dark .PhoneInputInput::placeholder {
+  @apply !text-dark-600;
+}
+
+/* Ensure icons and logo are visible in both themes */
+.dark img[src*="logo"], .dark img[src*="icon"] {
+    filter: invert(0);
+}
+
+img[src*="logo-full.svg"] {
+    @apply dark:brightness-200;
+}
+
+/* Fix phone input icon container in light mode */
+.PhoneInputCountry {
+    @apply px-2;
+}
+
+.PhoneInputCountrySelectArrow {
+    @apply text-slate-900 dark:text-white;
 }

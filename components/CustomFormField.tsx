@@ -50,7 +50,7 @@ const RenderField = ({
     switch (fieldType) {
         case FormFieldType.INPUT:
             return (
-                <div className="flex rounded-md items-center border h-11 border-dark-500 bg-dark-400">
+                <div className="flex rounded-md items-center border border-slate-200 dark:border-0 h-14 bg-white dark:bg-dark-400">
                     {iconSrc && iconAlt && (
                         <Image
                             src={iconSrc}
@@ -66,7 +66,7 @@ const RenderField = ({
                         aria-invalid={fieldState.invalid}
                         placeholder={placeholder}
                         autoComplete="off"
-                        className="shad-input border-0"
+                        className="shad-input border-0 h-full"
                         type="text"
                         name={name}
                     />
@@ -74,19 +74,21 @@ const RenderField = ({
             );
         case FormFieldType.PHONE_INPUT:
             return (
-                <PhoneInput
-                    defaultCountry="US"
-                    placeholder={placeholder}
-                    international
-                    withCountryCallingCode
-                    value={field.value as E164Number | undefined}
-                    onChange={field.onChange}
-                    className="input-phone border "
-                />
+                <div className="flex rounded-md items-center border border-slate-200 dark:border-0 bg-white dark:bg-dark-400">
+                    <PhoneInput
+                        defaultCountry="US"
+                        placeholder={placeholder}
+                        international
+                        withCountryCallingCode
+                        value={field.value as E164Number | undefined}
+                        onChange={field.onChange}
+                        className="input-phone w-full"
+                    />
+                </div>
             );
         case FormFieldType.DATE_PICKER:
             return (
-                <div className="flex rounded-md items-center border h-11 border-dark-500 bg-dark-400">
+                <div className="flex rounded-md items-center border h-11 border-slate-200 dark:border-0 bg-white dark:bg-dark-400">
                     <Image
                         src={"/assets/icons/calendar.svg"}
                         height={24}
@@ -120,7 +122,7 @@ const RenderField = ({
             return renderSkeleton ? renderSkeleton(field) : null;
         case FormFieldType.TEXTAREA:
             return (
-                <div className="flex rounded-md items-center border border-dark-500 bg-dark-400">
+                <div className="flex rounded-md items-center border border-slate-200 dark:border-0 bg-white dark:bg-dark-400">
                     <Textarea
                         {...field}
                         id="form-rhf-demo-title"
